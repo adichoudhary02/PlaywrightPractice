@@ -49,6 +49,40 @@ test('login page',async({page}) => {
        
      }
 
+     await page.locator("[data-test='shopping-cart-link']").click();
+
+     await expect(page).toHaveURL(/cart/);
+     await expect(page.getByText('Your Cart')).toBeVisible();
+     console.log("++++++++ In Cart ++++++++"); 
+
      
+     await expect(page.locator('[data-test = "cart-list"]')).toBeVisible();
+     const itemsCart = page.locator('[data-test="inventory-item"]');
+
+    const cartCount = await items.count();
+    
+     for(let i = 0; i < cartCount; i++) {
+        console.log(`---------(ITEM NO: ${i+1})---------`)
+        let itemCart = itemsCart.nth(i);
+        let item = items.nth(i);
+
+        let item_nameCart = await itemCart.locator('[data-test="inventory-item-name"]').textContent();
+        let item_name = await item.locator('[data-test="inventory-item-name"]').textContent();
+        
+        if(item_name == item_nameCart) console.log(`Item name matched: ${item_nameCart}`);
+
+        let item_descCart = await itemCart.locator('[data-test="inventory-item-desc"]').textContent();
+        let item_desc = await itemCart.locator('[data-test="inventory-item-desc"]').textContent();
+
+        
+        if(item_desc == item_descCart) console.log(`Item desc matched: ${item_descCart}`);
+
+        let item_priceCart = await itemCart.locator('[data-test="inventory-item-price"]').textContent();
+        let item_price = await itemCart.locator('[data-test="inventory-item-price"]').textContent();
+
+        
+        if(item_price == item_priceCart) console.log(`Item name matched: ${item_nameCart}`);
+
+     }
     await page.waitForTimeout(4000);
 });
